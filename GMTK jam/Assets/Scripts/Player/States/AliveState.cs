@@ -11,6 +11,8 @@ namespace Player.States
         
         public void OnEnter()
         {
+            Owner.PlayerView.SpriteRenderer.sprite =
+                Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].PlayerSprite;
             Owner.PlayerModel.RevivalButtonHoldTime = 0f;
             Owner.PlayerModel.RevivalActionTriggered = false;
         }
@@ -54,13 +56,13 @@ namespace Player.States
                 Owner.PlayerView.transform.localScale = scale;
             }
             
-            ManageTimeSwitchPress();
+            ManageSwitchPlacePress();
             ManageRevivalPress();
         }
 
-        private void ManageTimeSwitchPress()
+        private void ManageSwitchPlacePress()
         {
-            if (Keyboard.current.fKey.isPressed)
+            if (Keyboard.current.fKey.isPressed && Owner.GhostController != null)
             {
                 Owner.PlayerModel.SwitchPlaceButtonHoldTimer += Time.deltaTime;
 
@@ -79,7 +81,7 @@ namespace Player.States
 
         private void ManageRevivalPress()
         {
-            if (Keyboard.current.gKey.isPressed)
+            if (Keyboard.current.gKey.isPressed && Owner.GhostController == null)
             {
                 Owner.PlayerModel.RevivalButtonHoldTime += Time.deltaTime;
 

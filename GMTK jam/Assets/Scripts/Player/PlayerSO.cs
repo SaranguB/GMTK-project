@@ -35,7 +35,7 @@ namespace Player
     public class PlayerStateData
     {
         public PlayerState PlayerState;
-        public SpriteRenderer PlayerSprite;
+        public Sprite PlayerSprite;
         public float Speed;
         public float JumpForce;
     }

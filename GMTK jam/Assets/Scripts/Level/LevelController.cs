@@ -13,5 +13,17 @@ namespace Level
             this.levelView = levelView;
             levelModel = new LevelModel(levelSo);
         }
+
+        
+        private void LoadCurrentCheckPoint()
+        {
+           
+        }
+        
+        private void OnCheckPointChanged()
+        {
+            
+        }
+        
     }
 }

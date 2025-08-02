@@ -1,16 +1,54 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Level
 {
     public class LevelManager : MonoBehaviour
     {
-        [SerializeField] private LevelView levelView;
+        [SerializeField] private List<LevelView> levelView;
         [SerializeField] private LevelSO levelSO;
+
+        private Dictionary<Levels, LevelController> levelControllers = new();
         private LevelController levelController;
-        
-        public LevelManager()
+
+
+        private void Start()
         {
-            levelController = new LevelController(levelView, levelSO);
+            for (int i = 0; i < levelView.Count; i++)
+            {
+                levelController = new LevelController(levelView[i], levelSO);
+                levelController.LevelModel.LevelID = levelSO.LevelData[i].levelID;  
+                levelControllers.Add(levelSO.LevelData[i].level, levelController);
+            }
+
+            LoadCurrentLevel();
+        }
+        
+
+        private void LoadCurrentLevel()
+        {
+            if (!PlayerPrefs.HasKey("CurrentLevel"))
+            {
+                PlayerPrefs.SetInt("CurrentLevel", 0);
+                PlayerPrefs.Save();
+            }
+            
+            int currenLevel = PlayerPrefs.GetInt("CurrentLevel", 0);
+            if (levelControllers.TryGetValue(levelSO.LevelData[currenLevel].level, out levelController))
+            {
+                levelController.LevelView.gameObject.SetActive(true);
+            }
+        }
+
+        private void OnlevelFinished()
+        {
+            int currentLevel =  PlayerPrefs.GetInt("CurrentLevel", 0);
+            if (levelControllers.TryGetValue(levelSO.LevelData[currentLevel].level, out levelController))
+            {
+                levelController.LevelView.gameObject.SetActive(false);
+            }
+            PlayerPrefs.SetInt("CurrentLevel", currentLevel + 1);
+            LoadCurrentLevel();
         }
     }
 }

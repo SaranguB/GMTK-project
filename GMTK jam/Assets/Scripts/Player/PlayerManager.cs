@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Main;
 using Player.Ghost;
@@ -18,6 +19,7 @@ namespace Player
         
         private PlayerPool playerPool;
         private GhostPool ghostPool;
+        private GhostController currentGhost;
         
         private Dictionary<PlayerState, Queue<PlayerController>> spawnedPlayers = new();
 
@@ -68,10 +70,25 @@ namespace Player
                 if (spawnedPlayers.TryGetValue(PlayerState.SkeletonState, out var skeletonQueue) && aliveQueue.Count > 0)
                 {
                     PlayerController skeletonPlayer = skeletonQueue.Peek();
-                    alivePlayer.CreateGhost(ghostPool, skeletonPlayer);
+                    currentGhost = alivePlayer.CreateGhost(skeletonPlayer);
+                    StartCoroutine(RemoveGhostInSeconds(alivePlayer));
                 }
                 
             }
+        }
+
+        private IEnumerator RemoveGhostInSeconds(PlayerController alivePlayer)
+        {
+           yield return new WaitForSeconds(10);
+           
+           if (alivePlayer != null)
+           {
+               if (alivePlayer.GhostController != null)
+               {
+                   ghostPool.ReturnItem(alivePlayer.GhostController);
+                   alivePlayer.GhostController = null;
+               }
+           }
         }
 
         private void OnPlayerDied(PlayerController playerController)
@@ -80,12 +97,22 @@ namespace Player
             {
                 spawnedPlayers[PlayerState.AliveState].Clear(); 
             }
+
             if (!spawnedPlayers.ContainsKey(PlayerState.SkeletonState))
+            {
                 spawnedPlayers[PlayerState.SkeletonState] = new Queue<PlayerController>();
+            }
 
             spawnedPlayers[PlayerState.SkeletonState].Enqueue(playerController);
-
             SpawnPlayer();
+        }
+
+        private IEnumerator RemoveSkeletonInSeconds(PlayerController skeletonPlayer)
+        {
+            yield return new WaitForSeconds(5);
+            skeletonPlayer.PlayerStateMachine.ChangeState(PlayerState.AliveState);
+            playerPool.ReturnItem(skeletonPlayer);
+            spawnedPlayers[PlayerState.SkeletonState].Dequeue();
         }
 
         private void SpawnPlayer()

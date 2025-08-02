@@ -1,6 +1,8 @@
+using UnityEngine;
+
 namespace Level
 {
-    public class LevelView
+    public class LevelView : MonoBehaviour
     {
         
     }

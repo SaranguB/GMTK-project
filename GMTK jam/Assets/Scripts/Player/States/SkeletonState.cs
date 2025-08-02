@@ -9,7 +9,8 @@ namespace Player.States
         
         public void OnEnter()
         {
-            Owner.PlayerView.SpriteRenderer.color = Color.blue;
+            Owner.PlayerView.SpriteRenderer.sprite =
+            Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.SkeletonState].PlayerSprite;
         }
 
         public void OnExit()

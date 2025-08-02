@@ -11,13 +11,12 @@ namespace Player
         private PlayerView playerView;
         private PlayerModel playerModel;
         private PlayerStateMachine playerStateMachine;
-        private GhostController ghostController;
+        public GhostController GhostController;
         private GhostPool ghostPool;
         
         public PlayerView PlayerView => playerView;
         public PlayerModel PlayerModel => playerModel;
         public PlayerStateMachine PlayerStateMachine => playerStateMachine;
-        public GhostController GhostController => ghostController;
         
         public PlayerController(PlayerView playerPrefab, PlayerSO playerData, Transform parentTransform, GhostPool ghostPool = null)
         {
@@ -42,7 +41,7 @@ namespace Player
         private void onGhostDestroyed(GhostController ghost)
         {
             ghostPool.ReturnItem(ghost);
-            ghostController = null;
+            GhostController = null;
         }
 
         public void OnPlayerDied()
@@ -67,15 +66,11 @@ namespace Player
            
         }
 
-        public void CreateGhost(GhostPool ghostPool, PlayerController skeletonPlayer)
+        public GhostController CreateGhost(PlayerController skeletonPlayer)
         {
-            // Only set ghostPool if it's not already set
-            if (this.ghostPool == null)
-            {
-                this.ghostPool = ghostPool;
-            }
-            ghostController = this.ghostPool.GetItem();
-            ghostController.SetGhost(skeletonPlayer);
+            GhostController = this.ghostPool.GetItem();
+            GhostController.SetGhost(skeletonPlayer);
+            return GhostController;
         }
     }
 }
