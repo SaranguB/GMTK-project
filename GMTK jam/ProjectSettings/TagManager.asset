@@ -53,14 +53,17 @@ TagManager:
   - name: Button
     uniqueID: 2039712083
     locked: 0
+  - name: Player
+    uniqueID: 1162766929
+    locked: 0
+  - name: GroundDecoration
+    uniqueID: 228484443
+    locked: 0
   - name: Ground
     uniqueID: 1194332355
     locked: 0
   - name: Portals
     uniqueID: 3282711591
-    locked: 0
-  - name: Player
-    uniqueID: 1162766929
     locked: 0
   - name: Ghost
     uniqueID: 1760216471

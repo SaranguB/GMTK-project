@@ -17,7 +17,6 @@ namespace Level
     {
         public int levelID;
         public Levels level;
-        public List<Transform> checkPoints;
     }
 
 

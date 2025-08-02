@@ -1,3 +1,4 @@
+using Level;
 using Player;
 using Player.Ghost;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Events
         public EventController OnSkeltonRevived;
         public EventController<Transform> OnSwitchPlaced;
         public EventController<GhostController> OnGhostDestroyed;
+        public EventController<CheckPointViewController> OnCheckPointChanged;
         
         public EventService()
         {
@@ -17,6 +19,7 @@ namespace Events
             OnSkeltonRevived =  new EventController();
             OnSwitchPlaced =  new EventController<Transform>();
             OnGhostDestroyed =  new EventController<GhostController>();
+            OnCheckPointChanged =  new EventController<CheckPointViewController>();
         }
 
       

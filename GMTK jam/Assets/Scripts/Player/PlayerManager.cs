@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Level;
 using Main;
 using Player.Ghost;
 using Player.States;
@@ -10,7 +11,6 @@ namespace Player
 {
     public class PlayerManager : MonoBehaviour
     {
-        [SerializeField] private Transform level1Checkpoint;
         [SerializeField] private PlayerView playerPrefab;
         [SerializeField] private PlayerSO playerData;
         [SerializeField] private Transform ghostParent;
@@ -20,12 +20,17 @@ namespace Player
         private PlayerPool playerPool;
         private GhostPool ghostPool;
         private GhostController currentGhost;
+        private Transform currentCheckPoint;
         
         private Dictionary<PlayerState, Queue<PlayerController>> spawnedPlayers = new();
 
-        private void Start()
+        private void Awake()
         {
             SubscribeToEvents();
+        }
+
+        private void Start()
+        {
             ghostPool = new GhostPool(ghostPrefab, ghostParent, ghostData);
             playerPool = new PlayerPool(playerPrefab, playerData, this.transform, ghostPool);
             SpawnPlayer();
@@ -57,6 +62,19 @@ namespace Player
         {
             GameManager.Instance.EventService.OnPlayerDied.AddListener(OnPlayerDied);
             GameManager.Instance.EventService.OnSkeltonRevived.AddListener(OnSkeletonRevived);
+            GameManager.Instance.EventService.OnCheckPointChanged.AddListener(OnCheckPointChanged);
+        }
+        
+        private void OnCheckPointChanged(CheckPointViewController checkPoint)
+        {
+            if (checkPoint == null)
+            {
+                Debug.LogError("Received null checkpoint in OnCheckPointChanged!");
+                return;
+            }
+            
+            currentCheckPoint = checkPoint.transform;
+            Debug.Log($"Checkpoint changed to: {currentCheckPoint.position}");
         }
 
         private void OnSkeletonRevived()
@@ -104,6 +122,7 @@ namespace Player
             }
 
             spawnedPlayers[PlayerState.SkeletonState].Enqueue(playerController);
+            StartCoroutine(RemoveSkeletonInSeconds(spawnedPlayers[PlayerState.SkeletonState].Peek()));
             SpawnPlayer();
         }
 
@@ -123,7 +142,7 @@ namespace Player
                 spawnedPlayers[PlayerState.AliveState] = new Queue<PlayerController>();
 
             spawnedPlayers[PlayerState.AliveState].Enqueue(player);
-            player.SetPlayer(level1Checkpoint);
+            player.SetPlayer(currentCheckPoint);
         }
     }
 }

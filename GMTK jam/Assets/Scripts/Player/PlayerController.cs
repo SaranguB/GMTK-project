@@ -1,3 +1,4 @@
+using Level;
 using Main;
 using Player.Ghost;
 using Player.StateMachine;
@@ -13,6 +14,7 @@ namespace Player
         private PlayerStateMachine playerStateMachine;
         public GhostController GhostController;
         private GhostPool ghostPool;
+        private Transform currentCheckPoint;
         
         public PlayerView PlayerView => playerView;
         public PlayerModel PlayerModel => playerModel;
@@ -31,8 +33,9 @@ namespace Player
         private void SubscribeToEvents()
         {
             GameManager.Instance.EventService.OnGhostDestroyed.AddListener(onGhostDestroyed);
+           
         }
-        
+
         private void UnsubscribeFromEvents()
         {
             GameManager.Instance.EventService.OnGhostDestroyed.RemoveListener(onGhostDestroyed);
@@ -61,9 +64,16 @@ namespace Player
             
         }
 
-        public void SetPlayer(Transform level1Checkpoint)
+        public void SetPlayer(Transform checkpoint)
         {
+           if (checkpoint == null)
+           {
+               Debug.LogError("Checkpoint is null in SetPlayer!");
+               return;
+           }
            
+           playerView.transform.position = checkpoint.position;
+           Debug.Log($"Player position set to: {playerView.transform.position}");
         }
 
         public GhostController CreateGhost(PlayerController skeletonPlayer)

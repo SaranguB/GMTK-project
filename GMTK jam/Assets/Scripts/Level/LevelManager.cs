@@ -12,7 +12,7 @@ namespace Level
         private LevelController levelController;
 
 
-        private void Start()
+        private void Awake()
         {
             for (int i = 0; i < levelView.Count; i++)
             {
@@ -37,6 +37,7 @@ namespace Level
             if (levelControllers.TryGetValue(levelSO.LevelData[currenLevel].level, out levelController))
             {
                 levelController.LevelView.gameObject.SetActive(true);
+                levelController.LoadCurrentCheckPoint();
             }
         }
 

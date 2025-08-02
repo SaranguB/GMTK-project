@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Level
   m_EditorClassIdentifier: 
   levelData:
-  - level: 0
-    checkPoints: []
-  - level: 0
-    checkPoints: []
-  - level: 0
-    checkPoints: []
+  - levelID: 1
+    level: 0
+  - levelID: 2
+    level: 1
+  - levelID: 3
+    level: 2
