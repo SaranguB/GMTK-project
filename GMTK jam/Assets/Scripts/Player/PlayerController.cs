@@ -66,14 +66,7 @@ namespace Player
 
         public void SetPlayer(Transform checkpoint)
         {
-           if (checkpoint == null)
-           {
-               Debug.LogError("Checkpoint is null in SetPlayer!");
-               return;
-           }
-           
            playerView.transform.position = checkpoint.position;
-           Debug.Log($"Player position set to: {playerView.transform.position}");
         }
 
         public GhostController CreateGhost(PlayerController skeletonPlayer)

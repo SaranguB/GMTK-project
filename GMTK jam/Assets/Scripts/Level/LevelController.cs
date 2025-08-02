@@ -1,4 +1,5 @@
 using Main;
+using Player;
 using UnityEngine;
 
 namespace Level
@@ -16,6 +17,28 @@ namespace Level
             this.levelView = levelView;
             levelModel = new LevelModel(levelSo);
             SetCheckPoints();
+            SetButton();
+            SubscribeEvents();
+        }
+
+        private void SubscribeEvents()
+        {
+            GameManager.Instance.EventService.OnPortalButtonInteracted.AddListener(OnPortalButtonInteracted);
+        }
+
+        private void OnPortalButtonInteracted()
+        {
+            levelView.EnterPortalView.gameObject.SetActive(true);
+        }
+
+        private void UnsubscribeEvents()
+        {
+            GameManager.Instance.EventService.OnPortalButtonInteracted.RemoveListener(OnPortalButtonInteracted);
+        }
+
+        private void SetButton()
+        {
+            levelView.PortalButton.SetController(this);
         }
 
         private void SetCheckPoints()
@@ -33,8 +56,7 @@ namespace Level
             string key = $"Checkpoint_Level_{levelModel.LevelID}";
             int checkpointIndex = PlayerPrefs.GetInt(key, 0); 
             levelModel.currentCheckPoint = checkpointIndex;
-            
-            Debug.Log("Called");
+
             GameManager.Instance.EventService.OnCheckPointChanged.InvokeEvent
                 (levelView.CheckPointController[levelModel.currentCheckPoint]);
         }

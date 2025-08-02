@@ -12,12 +12,14 @@ namespace Player
         [SerializeField] private Rigidbody2D playerRB;
         [SerializeField] private Transform[] groundCheckPoint;
         [SerializeField] private LayerMask groundLayer;
-
+        [SerializeField] private BoxCollider2D playerCollider;
+        
         private PlayerController playerController;
         private Collider2D[] colliders;
 
         public SpriteRenderer SpriteRenderer => spriteRenderer;
         public Rigidbody2D PlayerRB => playerRB;
+        public BoxCollider2D PlayerCollider => playerCollider;
 
         public void SetController(PlayerController playerController)
         {

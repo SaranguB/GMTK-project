@@ -1,10 +1,13 @@
 using System;
+using Main;
 using UnityEngine;
 
 namespace Level.Interactables.Button
 {
-    public class ButtonInteractable : MonoBehaviour, IInteractable
+    public class PortalButtonInteractable : MonoBehaviour, IInteractable
     {
+        private LevelController levelController;
+        
         private void OnCollisionStay2D(Collision2D other)
         {
             if (other.gameObject.CompareTag("Player"))
@@ -20,12 +23,17 @@ namespace Level.Interactables.Button
 
         public void OnInteracted()
         {
-           
+           GameManager.Instance.EventService.OnPortalButtonInteracted.InvokeEvent();
         }
 
         public void OnStoppedInteracted()
         {
             
+        }
+
+        public void SetController(LevelController levelController)
+        {
+            this.levelController = levelController;
         }
     }
 }

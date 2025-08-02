@@ -12,7 +12,9 @@ namespace Events
         public EventController<Transform> OnSwitchPlaced;
         public EventController<GhostController> OnGhostDestroyed;
         public EventController<CheckPointViewController> OnCheckPointChanged;
-        
+        public EventController OnPortalButtonInteracted;
+        public EventController OnLevelFinished;
+        public EventController OnNextLevelCreated;
         public EventService()
         {
             OnPlayerDied =  new EventController<PlayerController>();
@@ -20,6 +22,9 @@ namespace Events
             OnSwitchPlaced =  new EventController<Transform>();
             OnGhostDestroyed =  new EventController<GhostController>();
             OnCheckPointChanged =  new EventController<CheckPointViewController>();
+            OnPortalButtonInteracted =  new EventController();
+            OnLevelFinished =  new EventController();
+            OnNextLevelCreated =  new EventController();
         }
 
       

@@ -111,10 +111,16 @@ namespace Player.States
         {
             if (Owner.PlayerModel.JumpPressed && Owner.PlayerModel.IsGrounded)
             {
+                float jumpForce = Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].JumpForce;
                 Owner.PlayerView.PlayerRB.linearVelocity = new Vector2(
                     Owner.PlayerView.PlayerRB.linearVelocity.x,
-                    Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].JumpForce
+                    jumpForce
                 );
+                Debug.Log($"Jump executed! Force: {jumpForce}, Current velocity: {Owner.PlayerView.PlayerRB.linearVelocity}");
+            }
+            else if (Owner.PlayerModel.JumpPressed && !Owner.PlayerModel.IsGrounded)
+            {
+                Debug.Log("Jump pressed but player is not grounded!");
             }
         }
 

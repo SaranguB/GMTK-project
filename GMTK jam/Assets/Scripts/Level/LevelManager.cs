@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Main;
 using UnityEngine;
 
 namespace Level
@@ -22,8 +24,25 @@ namespace Level
             }
 
             LoadCurrentLevel();
+            SubscribeToEvents();
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeFromEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
+           GameManager.Instance.EventService.OnLevelFinished.AddListener(OnlevelFinished);
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            GameManager.Instance.EventService.OnLevelFinished.RemoveListener(OnlevelFinished);
         }
         
+
 
         private void LoadCurrentLevel()
         {
@@ -50,6 +69,8 @@ namespace Level
             }
             PlayerPrefs.SetInt("CurrentLevel", currentLevel + 1);
             LoadCurrentLevel();
+            
+            GameManager.Instance.EventService.OnNextLevelCreated.InvokeEvent();
         }
     }
 }

@@ -47,6 +47,11 @@ namespace Player
             }
         }
 
+        private void OnDestroy()
+        {
+            UnsubscribeFromEvents();
+        }
+
         private void FixedUpdate()
         {
             foreach (var playerQueue in new List<Queue<PlayerController>>(spawnedPlayers.Values))
@@ -63,8 +68,60 @@ namespace Player
             GameManager.Instance.EventService.OnPlayerDied.AddListener(OnPlayerDied);
             GameManager.Instance.EventService.OnSkeltonRevived.AddListener(OnSkeletonRevived);
             GameManager.Instance.EventService.OnCheckPointChanged.AddListener(OnCheckPointChanged);
+            GameManager.Instance.EventService.OnLevelFinished.AddListener(OnLevelFinished);
+            GameManager.Instance.EventService.OnNextLevelCreated.AddListener(OnnextLevelCreated);
         }
-        
+
+        private void OnnextLevelCreated()
+        {
+           SpawnPlayer();
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            GameManager.Instance.EventService.OnPlayerDied.RemoveListener(OnPlayerDied);
+            GameManager.Instance.EventService.OnSkeltonRevived.RemoveListener(OnSkeletonRevived);
+            GameManager.Instance.EventService.OnCheckPointChanged.RemoveListener(OnCheckPointChanged);
+            GameManager.Instance.EventService.OnLevelFinished.RemoveListener(OnLevelFinished);
+            GameManager.Instance.EventService.OnNextLevelCreated.RemoveListener(OnnextLevelCreated);
+        }
+
+        private void OnLevelFinished()
+        {
+                // 1. Remove alive players
+                if (spawnedPlayers.TryGetValue(PlayerState.AliveState, out var aliveQueue))
+                {
+                    while (aliveQueue.Count > 0)
+                    {
+                        PlayerController player = aliveQueue.Dequeue();
+                        playerPool.ReturnItem(player);
+                    }
+                }
+
+                // 2. Remove skeleton players
+                if (spawnedPlayers.TryGetValue(PlayerState.SkeletonState, out var skeletonQueue))
+                {
+                    while (skeletonQueue.Count > 0)
+                    {
+                        PlayerController skeleton = skeletonQueue.Dequeue();
+                        playerPool.ReturnItem(skeleton);
+                    }
+                }
+
+                // 3. Clear ghost if any
+                if (currentGhost != null)
+                {
+                    ghostPool.ReturnItem(currentGhost);
+                    currentGhost = null;
+                }
+
+                // 4. Clear all player queues
+                spawnedPlayers.Clear();
+
+                // 5. Reset checkpoint reference
+                currentCheckPoint = null;
+        }
+
         private void OnCheckPointChanged(CheckPointViewController checkPoint)
         {
             if (checkPoint == null)
