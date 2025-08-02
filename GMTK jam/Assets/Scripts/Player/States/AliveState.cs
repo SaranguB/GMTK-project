@@ -84,15 +84,17 @@ namespace Player.States
             if (Keyboard.current.gKey.isPressed && Owner.GhostController == null)
             {
                 Owner.PlayerModel.RevivalButtonHoldTime += Time.deltaTime;
-
+                Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData.PlayerReviveSprite;
                 if (!Owner.PlayerModel.RevivalActionTriggered && Owner.PlayerModel.RevivalButtonHoldTime >= Owner.PlayerModel.PlayerData.RevivalTime)
                 {
                     GameManager.Instance.EventService.OnSkeltonRevived.InvokeEvent();
                     Owner.PlayerModel.RevivalActionTriggered = true;
+                    Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].PlayerSprite;
                 }
             }
             else
             {
+                Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].PlayerSprite;
                 Owner.PlayerModel.RevivalButtonHoldTime = 0f;
                 Owner.PlayerModel.RevivalActionTriggered = false;
             }

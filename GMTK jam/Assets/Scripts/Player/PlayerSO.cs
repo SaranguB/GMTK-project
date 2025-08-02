@@ -11,11 +11,13 @@ namespace Player
         [SerializeField] private List<PlayerStateData> playerStateData = new();
         [SerializeField] private float revivalTime;
         [SerializeField] private float switchPlaceButtonHoldTime;
+        [SerializeField] private Sprite playerReviveSprite; 
         private Dictionary<PlayerState, PlayerStateData> stateDataDict;
         
         public Dictionary<PlayerState, PlayerStateData> StateDataDict => stateDataDict;
         public float RevivalTime => revivalTime;
         public float SwitchPlaceButtonHoldTime  => switchPlaceButtonHoldTime;
+        public Sprite PlayerReviveSprite => playerReviveSprite;
 
         private void OnEnable()
         {

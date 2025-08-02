@@ -59,7 +59,7 @@ MonoBehaviour:
   - {fileID: 2435105429941661179}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 896
+    m_Bits: 384
   playerCollider: {fileID: 0}
 --- !u!212 &-1333946202969814126
 SpriteRenderer:
@@ -103,7 +103,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1162766929
-  m_SortingLayer: 4
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9dfb7fa992966294a98d1b9dd2f82807, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -177,8 +177,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.040566683, y: -0.096413136}
-  m_Size: {x: 1.2588391, y: 3.3129382}
+  m_Offset: {x: -0.03206122, y: -0.058139086}
+  m_Size: {x: 0.8675909, y: 2.1987314}
   m_Direction: 0
 --- !u!1 &3097881241613088582
 GameObject:
