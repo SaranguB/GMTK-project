@@ -17,7 +17,10 @@ namespace Player.States
             Owner.PlayerModel.RevivalActionTriggered = false;
         }
 
-        public void OnExit() {}
+        public void OnExit()
+        {
+          
+        }
 
         public void Tick()
         {
@@ -68,6 +71,8 @@ namespace Player.States
 
                 if (!Owner.PlayerModel.SwitchPlaceActionTriggered && Owner.PlayerModel.SwitchPlaceButtonHoldTimer >= Owner.PlayerModel.PlayerData.SwitchPlaceButtonHoldTime)
                 {
+                    Owner.GhostController = null;
+
                     GameManager.Instance.EventService.OnSwitchPlaced.InvokeEvent(Owner.PlayerView.transform); 
                     Owner.PlayerModel.SwitchPlaceActionTriggered = true;
                 }
@@ -102,11 +107,15 @@ namespace Player.States
 
         private void Move()
         {
-            Vector3 move = new Vector2(
-                Owner.PlayerModel.moveInput * Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].Speed,
-                0f
-            );
-            Owner.PlayerView.transform.position += move * Time.deltaTime;
+            if (Owner.GhostController == null)
+            {
+                Vector3 move = new Vector2(
+                    Owner.PlayerModel.moveInput *
+                    Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].Speed,
+                    0f
+                );
+                Owner.PlayerView.transform.position += move * Time.deltaTime;
+            }
         }
 
         private void Jump()

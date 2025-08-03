@@ -16,13 +16,13 @@ namespace Level
 
         private void Awake()
         {
+            PlayerPrefs.DeleteAll();
             for (int i = 0; i < levelView.Count; i++)
             {
                 levelController = new LevelController(levelView[i], levelSO);
                 levelController.LevelModel.LevelID = levelSO.LevelData[i].levelID;  
                 levelControllers.Add(levelSO.LevelData[i].level, levelController);
             }
-
             LoadCurrentLevel();
             SubscribeToEvents();
         }
@@ -41,8 +41,6 @@ namespace Level
         {
             GameManager.Instance.EventService.OnLevelFinished.RemoveListener(OnlevelFinished);
         }
-        
-
 
         private void LoadCurrentLevel()
         {
@@ -57,6 +55,7 @@ namespace Level
             {
                 levelController.LevelView.gameObject.SetActive(true);
                 levelController.LoadCurrentCheckPoint();
+                levelController.SetButton();
             }
         }
 

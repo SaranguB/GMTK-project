@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Main;
 using UnityEngine;
 
@@ -7,28 +7,41 @@ namespace Level.Interactables.Button
     public class PortalButtonInteractable : MonoBehaviour, IInteractable
     {
         private LevelController levelController;
-        
-        private void OnCollisionStay2D(Collision2D other)
+        private HashSet<GameObject> playersOnButton = new();
+
+        private void OnCollisionEnter2D(Collision2D other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                OnInteracted();
+                if (playersOnButton.Add(other.gameObject)) 
+                {
+                    OnInteracted();
+                }
             }
         }
 
         private void OnCollisionExit2D(Collision2D other)
         {
-            OnStoppedInteracted();
+            if (other.gameObject.CompareTag("Player"))
+            {
+                if (playersOnButton.Remove(other.gameObject))
+                {
+                    if (playersOnButton.Count == 0)
+                    {
+                        OnStoppedInteracted();
+                    }
+                }
+            }
         }
 
         public void OnInteracted()
         {
-           GameManager.Instance.EventService.OnPortalButtonInteracted.InvokeEvent();
+            levelController.LevelView.EnterPortalView.gameObject.SetActive(true);
         }
 
         public void OnStoppedInteracted()
         {
-            
+            levelController.LevelView.EnterPortalView.gameObject.SetActive(false);
         }
 
         public void SetController(LevelController levelController)

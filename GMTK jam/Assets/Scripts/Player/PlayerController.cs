@@ -33,8 +33,8 @@ namespace Player
         private void SubscribeToEvents()
         {
             GameManager.Instance.EventService.OnGhostDestroyed.AddListener(onGhostDestroyed);
-           
         }
+        
 
         private void UnsubscribeFromEvents()
         {
@@ -51,6 +51,7 @@ namespace Player
         {
             playerStateMachine.ChangeState(PlayerState.SkeletonState);
             GameManager.Instance.EventService.OnPlayerDied.InvokeEvent(this);
+            
         }
 
         private void CreateStateMachine()

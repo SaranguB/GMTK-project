@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Level;
 using Main;
 using Player.Ghost;
@@ -16,6 +17,7 @@ namespace Player
         [SerializeField] private Transform ghostParent;
         [SerializeField] private GhostView ghostPrefab;
         [SerializeField] private GhostSO ghostData;
+        [SerializeField] private CinemachineVirtualCamera playerCamera;
         
         private PlayerPool playerPool;
         private GhostPool ghostPool;
@@ -66,10 +68,16 @@ namespace Player
         private void SubscribeToEvents()
         {
             GameManager.Instance.EventService.OnPlayerDied.AddListener(OnPlayerDied);
+            GameManager.Instance.EventService.OnSwitchPlaced.AddListener(OnSwitchPlaced);
             GameManager.Instance.EventService.OnSkeltonRevived.AddListener(OnSkeletonRevived);
             GameManager.Instance.EventService.OnCheckPointChanged.AddListener(OnCheckPointChanged);
             GameManager.Instance.EventService.OnLevelFinished.AddListener(OnLevelFinished);
             GameManager.Instance.EventService.OnNextLevelCreated.AddListener(OnnextLevelCreated);
+        }
+
+        private void OnSwitchPlaced(Transform obj)
+        {
+            playerCamera.Follow =  spawnedPlayers[PlayerState.AliveState].Peek().PlayerView.transform;
         }
 
         private void OnnextLevelCreated()
@@ -126,12 +134,10 @@ namespace Player
         {
             if (checkPoint == null)
             {
-                Debug.LogError("Received null checkpoint in OnCheckPointChanged!");
                 return;
             }
             
             currentCheckPoint = checkPoint.transform;
-            Debug.Log($"Checkpoint changed to: {currentCheckPoint.position}");
         }
 
         private void OnSkeletonRevived()
@@ -142,10 +148,12 @@ namespace Player
             {
                 alivePlayer = aliveQueue.Peek();
                 
-                if (spawnedPlayers.TryGetValue(PlayerState.SkeletonState, out var skeletonQueue) && aliveQueue.Count > 0)
+                if (spawnedPlayers.TryGetValue(PlayerState.SkeletonState, out var skeletonQueue) && skeletonQueue.Count > 0)
                 {
                     PlayerController skeletonPlayer = skeletonQueue.Peek();
                     currentGhost = alivePlayer.CreateGhost(skeletonPlayer);
+                    playerCamera.Follow = currentGhost.GhostView.transform;
+                    
                     StartCoroutine(RemoveGhostInSeconds(alivePlayer));
                 }
                 
@@ -162,6 +170,7 @@ namespace Player
                {
                    ghostPool.ReturnItem(alivePlayer.GhostController);
                    alivePlayer.GhostController = null;
+                   playerCamera.Follow = alivePlayer.PlayerView.transform;
                }
            }
         }
@@ -197,9 +206,10 @@ namespace Player
 
             if (!spawnedPlayers.ContainsKey(PlayerState.AliveState))
                 spawnedPlayers[PlayerState.AliveState] = new Queue<PlayerController>();
-
+            
             spawnedPlayers[PlayerState.AliveState].Enqueue(player);
             player.SetPlayer(currentCheckPoint);
+            playerCamera.Follow = player.PlayerView.transform;
         }
     }
 }

@@ -16,10 +16,11 @@ MonoBehaviour:
   - PlayerState: 0
     PlayerSprite: {fileID: 21300000, guid: 9dfb7fa992966294a98d1b9dd2f82807, type: 3}
     Speed: 5
-    JumpForce: 0
+    JumpForce: 5
   - PlayerState: 1
     PlayerSprite: {fileID: 4356883595498181422, guid: 9059dce38e33da24d9c87b59f707aaef, type: 3}
     Speed: 0
     JumpForce: 0
   revivalTime: 0
   switchPlaceButtonHoldTime: 0
+  playerReviveSprite: {fileID: 0}

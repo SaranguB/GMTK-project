@@ -8,6 +8,7 @@ TagManager:
   - GroundLayer
   - background
   - Laser
+  - Boundary
   layers:
   - Default
   - TransparentFX
@@ -48,6 +49,9 @@ TagManager:
   - name: Background
     uniqueID: 1859727169
     locked: 0
+  - name: Portals
+    uniqueID: 3282711591
+    locked: 0
   - name: Player
     uniqueID: 1162766929
     locked: 0
@@ -65,9 +69,6 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 1194332355
-    locked: 0
-  - name: Portals
-    uniqueID: 3282711591
     locked: 0
   - name: Ghost
     uniqueID: 1760216471

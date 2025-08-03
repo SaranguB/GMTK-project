@@ -17,26 +17,24 @@ namespace Level
             this.levelView = levelView;
             levelModel = new LevelModel(levelSo);
             SetCheckPoints();
-            SetButton();
             SubscribeEvents();
         }
 
         private void SubscribeEvents()
         {
-            GameManager.Instance.EventService.OnPortalButtonInteracted.AddListener(OnPortalButtonInteracted);
         }
 
-        private void OnPortalButtonInteracted()
+        private void OnPortalButtonStopedInteracting()
         {
-            levelView.EnterPortalView.gameObject.SetActive(true);
+            levelView.EnterPortalView.gameObject.SetActive(false);
         }
+        
 
         private void UnsubscribeEvents()
         {
-            GameManager.Instance.EventService.OnPortalButtonInteracted.RemoveListener(OnPortalButtonInteracted);
         }
 
-        private void SetButton()
+        public void SetButton()
         {
             levelView.PortalButton.SetController(this);
         }

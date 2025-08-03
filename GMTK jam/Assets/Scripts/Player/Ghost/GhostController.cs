@@ -8,7 +8,7 @@ namespace Player.Ghost
     {
         private GhostView ghostView;
         private GhostModel ghostModel;
-        
+
         public GhostView GhostView => ghostView;
         public GhostModel GhostModel => ghostModel;
 
@@ -25,51 +25,55 @@ namespace Player.Ghost
             GameManager.Instance.EventService.OnSwitchPlaced.AddListener(OnSwitchPlaced);
         }
         
+
         private void UnsubscribeFromEvents()
         {
-            GameManager.Instance.EventService.OnSwitchPlaced.RemoveListener(OnSwitchPlaced);            
+            GameManager.Instance.EventService.OnSwitchPlaced.RemoveListener(OnSwitchPlaced);
         }
-        
+
         private void OnSwitchPlaced(Transform alivePlayerPosition)
         {
-           alivePlayerPosition.transform.position = ghostView.transform.position;
-           GameManager.Instance.EventService.OnGhostDestroyed.InvokeEvent(this);
+            alivePlayerPosition.position = ghostView.transform.position;
+            GameManager.Instance.EventService.OnGhostDestroyed.InvokeEvent(this);
         }
 
         public void GetInput()
         {
-           GhostModel.InputVector = Vector2.zero;
+            GhostModel.InputVector = Vector2.zero;
 
             if (Keyboard.current.aKey.isPressed)
                 GhostModel.InputVector.x -= 1f;
-
             if (Keyboard.current.dKey.isPressed)
                 GhostModel.InputVector.x += 1f;
-
             if (Keyboard.current.wKey.isPressed)
                 GhostModel.InputVector.y += 1f;
-
             if (Keyboard.current.sKey.isPressed)
                 GhostModel.InputVector.y -= 1f;
 
             if (Mathf.Approximately(GhostModel.InputVector.x, 1))
-            {
                 ghostView.transform.localScale = Vector3.one;
-            }
             else if (Mathf.Approximately(GhostModel.InputVector.x, -1))
-            {
-                Vector3 scale = ghostView.transform.localScale;
-                scale.x = -1;
-                ghostView.transform.localScale = scale;
-            }
+                ghostView.transform.localScale = new Vector3(-1, 1, 1);
 
             GhostModel.InputVector = GhostModel.InputVector.normalized;
         }
 
         public void Move()
         {
-           ghostView.GhostRB.MovePosition(ghostView.GhostRB.position + ghostModel.InputVector * 
-                (ghostModel.GhostData.Speed * Time.fixedDeltaTime));
+            Vector2 currentPos = ghostView.GhostRB.position;
+            Vector2 newPos = currentPos + GhostModel.InputVector * (GhostModel.GhostData.Speed * Time.fixedDeltaTime);
+
+            // Clamp to boundary
+            PolygonCollider2D boundary = ghostView.BoundaryCollider;
+            Bounds bounds = boundary.bounds;
+
+            float halfWidth = ghostView.GhostRB.GetComponent<Collider2D>().bounds.extents.x;
+            float halfHeight = ghostView.GhostRB.GetComponent<Collider2D>().bounds.extents.y;
+
+            newPos.x = Mathf.Clamp(newPos.x, bounds.min.x + halfWidth, bounds.max.x - halfWidth);
+            newPos.y = Mathf.Clamp(newPos.y, bounds.min.y + halfHeight, bounds.max.y - halfHeight);
+
+            ghostView.GhostRB.MovePosition(newPos);
         }
 
         public void SetGhost(PlayerController skeletonPlayer)

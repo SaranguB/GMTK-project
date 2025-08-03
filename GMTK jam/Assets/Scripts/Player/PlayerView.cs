@@ -1,4 +1,5 @@
 using System;
+using Cinemachine;
 using Main;
 using Player.Ghost;
 using Player.States;
@@ -13,6 +14,7 @@ namespace Player
         [SerializeField] private Transform[] groundCheckPoint;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private BoxCollider2D playerCollider;
+        private PolygonCollider2D boundaryCollider;
         
         private PlayerController playerController;
         private Collider2D[] colliders;
@@ -20,6 +22,12 @@ namespace Player
         public SpriteRenderer SpriteRenderer => spriteRenderer;
         public Rigidbody2D PlayerRB => playerRB;
         public BoxCollider2D PlayerCollider => playerCollider;
+
+
+        private void Awake()
+        { 
+            boundaryCollider = GameObject.FindWithTag("Boundary").GetComponent<PolygonCollider2D>();
+        }
 
         public void SetController(PlayerController playerController)
         {
