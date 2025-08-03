@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
 using Cinemachine;
 using Level;
 using Main;
@@ -25,6 +26,7 @@ namespace Player
         private GhostPool ghostPool;
         private GhostController currentGhost;
         private Transform currentCheckPoint;
+        private Coroutine ghostReviveCoroutine;
         
         private Dictionary<PlayerState, Queue<PlayerController>> spawnedPlayers = new();
 
@@ -45,7 +47,8 @@ namespace Player
         {
             foreach (var playerQueue in new List<Queue<PlayerController>>(spawnedPlayers.Values))
             {
-                foreach (var player in playerQueue)
+                PlayerController[] players = playerQueue.ToArray(); 
+                foreach (var player in players)
                 {
                     player.PlayerStateMachine.Tick();
                 }
@@ -149,19 +152,28 @@ namespace Player
                     currentGhost = alivePlayer.CreateGhost(skeletonPlayer);
                     playerCamera.Follow = currentGhost.GhostView.transform;
                     
-                    StartCoroutine(RemoveGhostInSeconds());
+                    // Stop any existing ghost revive coroutine
+                    if (ghostReviveCoroutine != null)
+                    {
+                        StopCoroutine(ghostReviveCoroutine);
+                    }
+                    ghostReviveCoroutine = StartCoroutine(RemoveGhostInSeconds(currentGhost));
                 }
                 
             }
         }
 
-        private IEnumerator RemoveGhostInSeconds()
+        private IEnumerator RemoveGhostInSeconds(GhostController ghost)
         {
             float duration = 5f;
             float elapsed = 0f;
 
             while (elapsed < duration)
             {
+                if (currentGhost != ghost)
+                {
+                    yield break;
+                }
                 elapsed += Time.deltaTime;
                 float remaining = Mathf.Clamp01(1f - (elapsed / duration));
 
@@ -169,11 +181,19 @@ namespace Player
                 yield return null;
             }
             
-            OnGhostDestroyed();
+            if(currentGhost == ghost)
+             OnGhostDestroyed();
         }
 
         private void OnGhostDestroyed()
         {
+            // Stop the ghost revive coroutine if it's running
+            if (ghostReviveCoroutine != null)
+            {
+                StopCoroutine(ghostReviveCoroutine);
+                ghostReviveCoroutine = null;
+            }
+            
             PlayerController alivePlayer = spawnedPlayers[PlayerState.AliveState].Peek();
             if (alivePlayer != null)
             {
@@ -181,14 +201,17 @@ namespace Player
                 {
                     VFXService.Instance.PlayVFXAtPosition(alivePlayer.GhostController.GhostView.GhostSmokeVFX,
                         alivePlayer.GhostController.GhostView.transform);
+                    SoundManager.Instance.PlaySoundEffects(SoundType.PoofSound);
                     alivePlayer.OnGhostDestroyed();
                     playerCamera.Follow = alivePlayer.PlayerView.transform;
+                    GameManager.Instance.UIService.InGameUIViewController.ResetGhostReviveFill();
                 }
             }
         }
 
         private void OnPlayerDied(PlayerController playerController)
         {
+            SoundManager.Instance.PlaySoundEffects(SoundType.DeathSound);
             if (spawnedPlayers.ContainsKey(PlayerState.AliveState))
             {
                 spawnedPlayers[PlayerState.AliveState].Clear(); 
@@ -198,7 +221,7 @@ namespace Player
             {
                 spawnedPlayers[PlayerState.SkeletonState] = new Queue<PlayerController>();
             }
-
+            
             spawnedPlayers[PlayerState.SkeletonState].Enqueue(playerController);
             StartCoroutine(RemoveSkeletonInSeconds(spawnedPlayers[PlayerState.SkeletonState].Peek()));
             SpawnPlayer();

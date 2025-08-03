@@ -1,3 +1,4 @@
+using Audio;
 using Main;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -82,6 +83,7 @@ namespace Player.Ghost
         {
             VFXService.Instance.PlayVFXAtPosition(ghostView.GhostSmokeVFX, ghostView.transform);
             ghostView.gameObject.SetActive(true);
+            SoundManager.Instance.PlaySoundEffects(SoundType.PoofSound);
             RestrictGhost(skeletonPlayer);
         }
 

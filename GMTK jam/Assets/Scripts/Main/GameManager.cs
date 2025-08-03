@@ -33,6 +33,8 @@ namespace Main
             base.Awake();
             eventService = new EventService();
             currentState = GameStates.MainMenu; 
+            PlayerPrefs.DeleteAll();
+            PlayBackgroudMusic();
         }
 
         public void ChangeState(GameStates newState)

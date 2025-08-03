@@ -36,12 +36,29 @@ namespace Level.Interactables.Button
 
         public void OnInteracted()
         {
-            levelController.LevelView.EnterLevelFInishPortalView.gameObject.SetActive(true);
+            if (levelController.LevelView.EnterLevelFInishPortalView != null)
+            {
+                levelController.LevelView.EnterLevelFInishPortalView.gameObject.SetActive(true);
+            }
+
+            if (levelController.LevelView.GameFinishedLevelFinishPortalView != null)
+            {
+                levelController.LevelView.GameFinishedLevelFinishPortalView.gameObject.SetActive(true);
+            }
+           
         }
 
         public void OnStoppedInteracted()
         {
-            levelController.LevelView.EnterLevelFInishPortalView.gameObject.SetActive(false);
+            if (levelController.LevelView.EnterLevelFInishPortalView != null)
+            {
+                levelController.LevelView.EnterLevelFInishPortalView.gameObject.SetActive(false);
+            }
+
+            if (levelController.LevelView.GameFinishedLevelFinishPortalView != null)
+            {
+                levelController.LevelView.GameFinishedLevelFinishPortalView.gameObject.SetActive(false);
+            }
         }
 
         public void SetController(LevelController levelController)

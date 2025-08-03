@@ -18,6 +18,7 @@ namespace Level.Portals
         public void OnInteracted()
         {
             GameManager.Instance.UIService.GameEndUIController.EnableEndScreen();
+            //GameManager.Instance.EventService.OnLevelFinished.InvokeEvent();
         }
 
         public void OnStoppedInteracted()

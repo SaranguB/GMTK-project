@@ -67,8 +67,7 @@ namespace Level
             PlayerPrefs.SetInt(key, newCheckpointIndex);
             PlayerPrefs.Save();
             
-            Debug.Log($"Checkpoint changed to {newCheckpointIndex} for level {levelModel.LevelID}");
-            // Trigger the event directly instead of calling LoadCurrentCheckPoint to avoid recursion
+            
             GameManager.Instance.EventService.OnCheckPointChanged.InvokeEvent
                 (levelView.CheckPointController[levelModel.currentCheckPoint]);
         }

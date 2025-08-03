@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
 using Main;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,20 +53,26 @@ namespace UI.MainMenuUI
         
         private void OnInstructionPanelBackButtonClicked()
         {
+            SoundManager.Instance.PlaySoundEffects(SoundType.ButtonSound);
+            
           CanvasGroupExtension.Hide(instructionsMenuCanvas);
           UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         }
         
         private void OnPlayButtonClicked()
         {
+            SoundManager.Instance.PlaySoundEffects(SoundType.ButtonSound);
+            
             CanvasGroupExtension.Hide(mainMenuCanvas);
             GameManager.Instance.ChangeState(GameStates.Gameplay);
+            SoundManager.Instance.PlayBackgroundMusic(SoundType.GameplayBackground);
             CanvasGroupExtension.Show(GameManager.Instance.UIService.InGameUIViewController.IngameUICanvas); 
             UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         }
         
         private void OnInstructionsButtonClicked()
         {
+            SoundManager.Instance.PlaySoundEffects(SoundType.ButtonSound);
            CanvasGroupExtension.Show(instructionsMenuCanvas);
            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
            
@@ -73,6 +80,7 @@ namespace UI.MainMenuUI
         
         private void OnquitButtonClicked()
         {
+            SoundManager.Instance.PlaySoundEffects(SoundType.ButtonSound);
             Application.Quit();
             UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         }

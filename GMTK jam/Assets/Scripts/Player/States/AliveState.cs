@@ -69,7 +69,6 @@ namespace Player.States
 
                 if (!Owner.PlayerModel.SwitchPlaceActionTriggered && Owner.PlayerModel.SwitchPlaceButtonHoldTimer >= Owner.PlayerModel.PlayerData.SwitchPlaceButtonHoldTime)
                 {
-                    
                     GameManager.Instance.EventService.OnSwitchPlaced.InvokeEvent(Owner.PlayerView.transform); 
                     Owner.PlayerModel.SwitchPlaceActionTriggered = true;
                 }
@@ -109,6 +108,7 @@ namespace Player.States
                 }
                 else
                 {
+                    GameManager.Instance.UIService.InGameUIViewController.ResetGhostReviveFill();
                     Owner.PlayerView.GhostRevivingVFX.ParticleSystem.Stop();
                     Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData
                         .StateDataDict[PlayerState.AliveState].PlayerSprite;

@@ -18,6 +18,7 @@ namespace Level.Portals
         public void OnInteracted()
         {
             GameManager.Instance.EventService.OnLevelFinished.InvokeEvent();
+            GameManager.Instance.UIService.InGameUIViewController.ResetGhostReviveFill();
         }
 
         public void OnStoppedInteracted()

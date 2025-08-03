@@ -16,7 +16,6 @@ namespace Level
 
         private void Awake()
         {
-            PlayerPrefs.DeleteAll();
             for (int i = 0; i < levelView.Count; i++)
             {
                 levelController = new LevelController(levelView[i], levelSO);
