@@ -54,17 +54,6 @@ namespace Player
             UnsubscribeFromEvents();
         }
 
-        private void FixedUpdate()
-        {
-            foreach (var playerQueue in new List<Queue<PlayerController>>(spawnedPlayers.Values))
-            {
-                foreach (var player in playerQueue)
-                {
-                    player.PlayerStateMachine.FixedTick();
-                }
-            }
-        }
-
         private void SubscribeToEvents()
         {
             GameManager.Instance.EventService.OnPlayerDied.AddListener(OnPlayerDied);

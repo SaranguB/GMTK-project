@@ -22,10 +22,6 @@ namespace Player.States
         {
            
         }
-
-        public void FixedTick()
-        {
-            
-        }
+        
     }
 }

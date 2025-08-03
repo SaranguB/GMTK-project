@@ -24,14 +24,11 @@ namespace Player.States
 
         public void Tick()
         {
+            if (GameManager.Instance.CurrentState != GameStates.Gameplay) return;
+            
             GetInput();
             Move();
             Jump();
-        }
-
-        public void FixedTick()
-        {
-            
         }
 
         private void GetInput()

@@ -23,11 +23,15 @@ namespace Player.Ghost
 
         private void Update()
         {
+            if (GameManager.Instance.CurrentState != GameStates.Gameplay) return;
+            
             ghostController.GetInput();
         }
 
         private void FixedUpdate()
         {
+            if (GameManager.Instance.CurrentState != GameStates.Gameplay) return;
+            
             ghostController.Move();
         }
 
@@ -43,10 +47,6 @@ namespace Player.Ghost
         {
             this.ghostController = ghostController;
         }
-
-        public void SetGhost()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
