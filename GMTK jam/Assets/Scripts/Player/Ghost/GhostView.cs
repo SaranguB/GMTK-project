@@ -1,5 +1,6 @@
 using System;
 using Cinemachine;
+using Main;
 using Player.States;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,6 +29,14 @@ namespace Player.Ghost
         private void FixedUpdate()
         {
             ghostController.Move();
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag("Laser"))
+            {
+                GameManager.Instance.EventService.OnGhostDestroyed.InvokeEvent();
+            }
         }
 
         public void SetController(GhostController ghostController)

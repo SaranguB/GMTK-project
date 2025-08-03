@@ -73,11 +73,13 @@ namespace Player
             GameManager.Instance.EventService.OnCheckPointChanged.AddListener(OnCheckPointChanged);
             GameManager.Instance.EventService.OnLevelFinished.AddListener(OnLevelFinished);
             GameManager.Instance.EventService.OnNextLevelCreated.AddListener(OnnextLevelCreated);
+            GameManager.Instance.EventService.OnGhostDestroyed.AddListener(OnGhostDestroyed);
         }
 
         private void OnSwitchPlaced(Transform obj)
         {
             playerCamera.Follow =  spawnedPlayers[PlayerState.AliveState].Peek().PlayerView.transform;
+            OnGhostDestroyed();
         }
 
         private void OnnextLevelCreated()
@@ -92,6 +94,7 @@ namespace Player
             GameManager.Instance.EventService.OnCheckPointChanged.RemoveListener(OnCheckPointChanged);
             GameManager.Instance.EventService.OnLevelFinished.RemoveListener(OnLevelFinished);
             GameManager.Instance.EventService.OnNextLevelCreated.RemoveListener(OnnextLevelCreated);
+            GameManager.Instance.EventService.OnGhostDestroyed.RemoveListener(OnGhostDestroyed);
         }
 
         private void OnLevelFinished()
@@ -154,25 +157,29 @@ namespace Player
                     currentGhost = alivePlayer.CreateGhost(skeletonPlayer);
                     playerCamera.Follow = currentGhost.GhostView.transform;
                     
-                    StartCoroutine(RemoveGhostInSeconds(alivePlayer));
+                    StartCoroutine(RemoveGhostInSeconds());
                 }
                 
             }
         }
 
-        private IEnumerator RemoveGhostInSeconds(PlayerController alivePlayer)
+        private IEnumerator RemoveGhostInSeconds()
         {
-           yield return new WaitForSeconds(10);
-           
-           if (alivePlayer != null)
-           {
-               if (alivePlayer.GhostController != null)
-               {
-                   ghostPool.ReturnItem(alivePlayer.GhostController);
-                   alivePlayer.GhostController = null;
-                   playerCamera.Follow = alivePlayer.PlayerView.transform;
-               }
-           }
+            yield return new WaitForSeconds(10);
+            OnGhostDestroyed();
+        }
+
+        private void OnGhostDestroyed()
+        {
+            PlayerController alivePlayer = spawnedPlayers[PlayerState.AliveState].Peek();
+            if (alivePlayer != null)
+            {
+                if (alivePlayer.GhostController != null)
+                {
+                    alivePlayer.OnGhostDestroyed();
+                    playerCamera.Follow = alivePlayer.PlayerView.transform;
+                }
+            }
         }
 
         private void OnPlayerDied(PlayerController playerController)
@@ -195,15 +202,25 @@ namespace Player
         private IEnumerator RemoveSkeletonInSeconds(PlayerController skeletonPlayer)
         {
             yield return new WaitForSeconds(5);
-            skeletonPlayer.PlayerStateMachine.ChangeState(PlayerState.AliveState);
-            playerPool.ReturnItem(skeletonPlayer);
-            spawnedPlayers[PlayerState.SkeletonState].Dequeue();
+            if (spawnedPlayers.TryGetValue(PlayerState.SkeletonState, out var skeletonQueue) &&
+                skeletonQueue.Count > 0 &&
+                skeletonQueue.Peek() == skeletonPlayer)
+            {
+                skeletonPlayer.PlayerStateMachine.ChangeState(PlayerState.AliveState);
+                playerPool.ReturnItem(skeletonPlayer);
+                skeletonQueue.Dequeue();
+            }
         }
 
         private void SpawnPlayer()
         {
             PlayerController player = playerPool.GetItem();
 
+            if (player.PlayerStateMachine.CurrentState is SkeletonState)
+            {
+                player.PlayerStateMachine.ChangeState(PlayerState.AliveState);    
+            }
+            
             if (!spawnedPlayers.ContainsKey(PlayerState.AliveState))
                 spawnedPlayers[PlayerState.AliveState] = new Queue<PlayerController>();
             

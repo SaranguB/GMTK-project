@@ -10,7 +10,7 @@ namespace Events
         public EventController<PlayerController> OnPlayerDied;
         public EventController OnSkeltonRevived;
         public EventController<Transform> OnSwitchPlaced;
-        public EventController<GhostController> OnGhostDestroyed;
+        public EventController OnGhostDestroyed;
         public EventController<CheckPointViewController> OnCheckPointChanged;
         public EventController OnPortalButtonInteracted;
         public EventController OnPortalButtonStopedInteracting;
@@ -22,7 +22,7 @@ namespace Events
             OnPlayerDied =  new EventController<PlayerController>();
             OnSkeltonRevived =  new EventController();
             OnSwitchPlaced =  new EventController<Transform>();
-            OnGhostDestroyed =  new EventController<GhostController>();
+            OnGhostDestroyed =  new EventController();
             OnCheckPointChanged =  new EventController<CheckPointViewController>();
             OnPortalButtonInteracted =  new EventController();
             OnLevelFinished =  new EventController();

@@ -32,18 +32,18 @@ namespace Player
 
         private void SubscribeToEvents()
         {
-            GameManager.Instance.EventService.OnGhostDestroyed.AddListener(onGhostDestroyed);
+           
         }
         
 
         private void UnsubscribeFromEvents()
         {
-            GameManager.Instance.EventService.OnGhostDestroyed.RemoveListener(onGhostDestroyed);
+            
         }
         
-        private void onGhostDestroyed(GhostController ghost)
+        public void OnGhostDestroyed()
         {
-            ghostPool.ReturnItem(ghost);
+            ghostPool.ReturnItem(GhostController);
             GhostController = null;
         }
 

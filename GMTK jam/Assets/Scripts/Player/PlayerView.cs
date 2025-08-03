@@ -36,18 +36,33 @@ namespace Player
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (other.gameObject.CompareTag("Spike"))
+            if (other.gameObject.CompareTag("Spike") || other.gameObject.CompareTag("Laser"))
             {
-                if (playerController.PlayerStateMachine.CurrentState is AliveState)
-                {
-                    if (playerController.GhostController != null)
-                    {
-                        GameManager.Instance.EventService.OnGhostDestroyed.InvokeEvent(playerController.GhostController);
-                    }
-                    playerController.OnPlayerDied();
-                }
+                OnPlayerDead();
             }
         }
+        
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject.CompareTag("Laser"))
+            {
+                OnPlayerDead();
+            }
+        }
+
+        private void OnPlayerDead()
+        {
+            if (playerController.PlayerStateMachine.CurrentState is AliveState)
+            {
+                if (playerController.GhostController != null)
+                {
+                    GameManager.Instance.EventService.OnGhostDestroyed.InvokeEvent();
+                }
+                playerController.OnPlayerDied();
+            }
+        }
+
+      
 
         private void FixedUpdate()
         {

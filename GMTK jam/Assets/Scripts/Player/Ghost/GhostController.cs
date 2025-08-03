@@ -34,7 +34,7 @@ namespace Player.Ghost
         private void OnSwitchPlaced(Transform alivePlayerPosition)
         {
             alivePlayerPosition.position = ghostView.transform.position;
-            GameManager.Instance.EventService.OnGhostDestroyed.InvokeEvent(this);
+            GameManager.Instance.EventService.OnGhostDestroyed.InvokeEvent();
         }
 
         public void GetInput()

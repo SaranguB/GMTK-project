@@ -102,7 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d754e14713834c75a9c1f4f8e52d7f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ghostCamera: {fileID: 0}
   GhostRB: {fileID: 5449540315634112881}
 --- !u!50 &5449540315634112881
 Rigidbody2D:
@@ -165,6 +164,6 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.12226939, y: -0.091701746}
-  m_Size: {x: 0.886044, y: 1.8764253}
+  m_Offset: {x: 0.014576316, y: -0.022470593}
+  m_Size: {x: 0.6706579, y: 1.2456512}
   m_Direction: 0

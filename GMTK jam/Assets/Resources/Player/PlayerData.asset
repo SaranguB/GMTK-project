@@ -23,4 +23,4 @@ MonoBehaviour:
     JumpForce: 0
   revivalTime: 0
   switchPlaceButtonHoldTime: 0
-  playerReviveSprite: {fileID: 0}
+  playerReviveSprite: {fileID: -9111114164809512220, guid: 63f8c39ffd118a244b07c0d80e3f99ca, type: 3}
