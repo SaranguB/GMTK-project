@@ -83,15 +83,15 @@ namespace Player.States
 
         private void ManageRevivalPress()
         {
-            Owner. = null;
-            
             if (GameManager.Instance.PlayerManager.SpawnedPlayers.ContainsKey(PlayerState.SkeletonState))
             {
                 if (Keyboard.current.gKey.isPressed && Owner.GhostController == null)
                 {
-                     vfx = VFXService.Instance.PlayVFXAtPosition
-                        (Owner.PlayerView.GhostRevivingVFX, Owner.PlayerView.transform);
-                    
+                    if (!Owner.PlayerView.GhostRevivingVFX.ParticleSystem.isPlaying)
+                    {
+                        Owner.PlayerView.GhostRevivingVFX.ParticleSystem.Play();
+                    }
+
                     Owner.PlayerModel.RevivalButtonHoldTime += Time.deltaTime;
                     Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData.PlayerReviveSprite;
                     GameManager.Instance.UIService.InGameUIViewController.SetGhostReviveFill
@@ -100,6 +100,7 @@ namespace Player.States
                     if (!Owner.PlayerModel.RevivalActionTriggered && Owner.PlayerModel.RevivalButtonHoldTime >=
                         Owner.PlayerModel.PlayerData.RevivalTime)
                     {
+                        Owner.PlayerView.GhostRevivingVFX.ParticleSystem.Stop();
                         GameManager.Instance.EventService.OnSkeltonRevived.InvokeEvent();
                         Owner.PlayerModel.RevivalActionTriggered = true;
                         Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData
@@ -108,10 +109,7 @@ namespace Player.States
                 }
                 else
                 {
-                    if (vfx != null)
-                    {
-                        vfx.StopVFX(); // Or whatever logic you need
-                    }
+                    Owner.PlayerView.GhostRevivingVFX.ParticleSystem.Stop();
                     Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData
                         .StateDataDict[PlayerState.AliveState].PlayerSprite;
                     Owner.PlayerModel.RevivalButtonHoldTime = 0f;

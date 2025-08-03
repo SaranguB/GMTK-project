@@ -1,4 +1,5 @@
 using UnityEngine;
+using VFX;
 
 namespace Player
 {
@@ -11,6 +12,8 @@ namespace Player
         public Vector2 InputVector;
         
         public PlayerSO PlayerData => playerData;
+        public VFXViewController currentVFX;
+
         public bool SwitchPlaceActionTriggered = false;
 
         public float SwitchPlaceButtonHoldTimer = 0f;

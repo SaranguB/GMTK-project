@@ -8,6 +8,8 @@ namespace VFX
         [SerializeField] ParticleSystem particleSystem;
         private Transform entityTransform;
         
+        public ParticleSystem ParticleSystem => particleSystem;
+        
         private void Update()
         {
             if (!particleSystem.main.loop)

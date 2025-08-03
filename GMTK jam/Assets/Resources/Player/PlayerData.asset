@@ -21,6 +21,6 @@ MonoBehaviour:
     PlayerSprite: {fileID: 4356883595498181422, guid: 9059dce38e33da24d9c87b59f707aaef, type: 3}
     Speed: 0
     JumpForce: 0
-  revivalTime: 2
+  revivalTime: 1
   switchPlaceButtonHoldTime: 0
   playerReviveSprite: {fileID: -9111114164809512220, guid: 63f8c39ffd118a244b07c0d80e3f99ca, type: 3}

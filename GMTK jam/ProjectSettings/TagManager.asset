@@ -9,6 +9,7 @@ TagManager:
   - background
   - Laser
   - Boundary
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -51,6 +52,9 @@ TagManager:
     locked: 0
   - name: Portals
     uniqueID: 3282711591
+    locked: 0
+  - name: VFX
+    uniqueID: 2115010971
     locked: 0
   - name: Player
     uniqueID: 1162766929

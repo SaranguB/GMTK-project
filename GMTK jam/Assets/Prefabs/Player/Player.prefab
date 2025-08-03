@@ -61,6 +61,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 384
   playerCollider: {fileID: 0}
+  ghostRevivingVFX: {fileID: 3610933795536960746}
 --- !u!212 &-1333946202969814126
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -330,6 +331,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08498ace39a2c1946bab454fb07abd34, type: 3}
+--- !u!114 &3610933795536960746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3160072613734591916, guid: 08498ace39a2c1946bab454fb07abd34, type: 3}
+  m_PrefabInstance: {fileID: 1857251522488422726}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d355fab86744954bc2c0c43b4d8bfdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4554462424011353585 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2806581610222615735, guid: 08498ace39a2c1946bab454fb07abd34, type: 3}
