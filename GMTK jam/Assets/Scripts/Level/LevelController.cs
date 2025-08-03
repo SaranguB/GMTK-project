@@ -26,7 +26,7 @@ namespace Level
 
         private void OnPortalButtonStopedInteracting()
         {
-            levelView.EnterPortalView.gameObject.SetActive(false);
+            levelView.EnterLevelFInishPortalView.gameObject.SetActive(false);
         }
         
 

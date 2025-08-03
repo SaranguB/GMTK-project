@@ -1,3 +1,4 @@
+using Audio;
 using Events;
 using Player;
 using UI;
@@ -37,13 +38,18 @@ namespace Main
         public void ChangeState(GameStates newState)
         {
             if (currentState == newState)
-            {
                 return;
-            }
-            else
-            {
-                currentState = newState;
-            }
+            
+            currentState = newState;
+            PlayBackgroudMusic();
+        }
+
+        private void PlayBackgroudMusic()
+        {
+            if (currentState == GameStates.MainMenu)
+                SoundManager.Instance.PlayBackgroundMusic(SoundType.MenuBackground, true);
+            else if(currentState == GameStates.Gameplay)
+                SoundManager.Instance.PlayBackgroundMusic(SoundType.GameplayBackground, true);
         }
     }
     

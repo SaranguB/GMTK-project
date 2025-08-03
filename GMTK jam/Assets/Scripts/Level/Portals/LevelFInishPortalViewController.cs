@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Level.Portals
 {
-    public class PortalViewController : MonoBehaviour, IInteractable
+    public class LevelFInishPortalViewController : MonoBehaviour, IInteractable
     {
         private void OnTriggerEnter2D(Collider2D other)
         {

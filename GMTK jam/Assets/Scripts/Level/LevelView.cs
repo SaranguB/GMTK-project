@@ -9,13 +9,14 @@ namespace Level
     {
         [SerializeField] private CheckPointViewController[] checkPointController;
         [SerializeField] private PortalButtonInteractable portalButton;
-        [SerializeField] private PortalViewController EnterPortal;
-        [SerializeField] private PortalViewController ExitPortal;
-        
+        [SerializeField] private LevelFInishPortalViewController enterLevelFInishPortal;
+        [SerializeField] private LevelFInishPortalViewController exitLevelFInishPortal;
+        [SerializeField] private LevelFInishPortalViewController gameFinishedLevelFInishPortal;
         public CheckPointViewController[] CheckPointController => checkPointController;
         public PortalButtonInteractable PortalButton => portalButton;
-        public PortalViewController EnterPortalView => EnterPortal;
-        public PortalViewController ExitPortalView => ExitPortal;
+        public LevelFInishPortalViewController EnterLevelFInishPortalView => enterLevelFInishPortal;
+        public LevelFInishPortalViewController ExitLevelFInishPortalView => exitLevelFInishPortal;
+        public LevelFInishPortalViewController GameFinishedLevelFInishPortalView => gameFinishedLevelFInishPortal;
         
         private void Awake()
         {
