@@ -7,6 +7,10 @@ namespace Audio
         GameplayBackground,
         ButtonSound,
         DeathSound,
+        GhostSound,
+        PortalSound,
         LevelEndSound,
+        WalkingSound,
+        PoofSound,
     }
 }

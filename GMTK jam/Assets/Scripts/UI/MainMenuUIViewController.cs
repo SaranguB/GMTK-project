@@ -66,7 +66,7 @@ namespace UI.MainMenuUI
         
         private void OnInstructionsButtonClicked()
         {
-           CanvasGroupExtension.Show(mainMenuCanvas);
+           CanvasGroupExtension.Show(instructionsMenuCanvas);
            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
            
         }
