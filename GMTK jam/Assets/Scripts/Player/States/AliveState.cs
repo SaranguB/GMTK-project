@@ -2,6 +2,7 @@ using Main;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utilities.StateMachine;
+using VFX;
 
 namespace Player.States
 {
@@ -82,22 +83,40 @@ namespace Player.States
 
         private void ManageRevivalPress()
         {
-            if (Keyboard.current.gKey.isPressed && Owner.GhostController == null)
+            Owner. = null;
+            
+            if (GameManager.Instance.PlayerManager.SpawnedPlayers.ContainsKey(PlayerState.SkeletonState))
             {
-                Owner.PlayerModel.RevivalButtonHoldTime += Time.deltaTime;
-                Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData.PlayerReviveSprite;
-                if (!Owner.PlayerModel.RevivalActionTriggered && Owner.PlayerModel.RevivalButtonHoldTime >= Owner.PlayerModel.PlayerData.RevivalTime)
+                if (Keyboard.current.gKey.isPressed && Owner.GhostController == null)
                 {
-                    GameManager.Instance.EventService.OnSkeltonRevived.InvokeEvent();
-                    Owner.PlayerModel.RevivalActionTriggered = true;
-                    Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].PlayerSprite;
+                     vfx = VFXService.Instance.PlayVFXAtPosition
+                        (Owner.PlayerView.GhostRevivingVFX, Owner.PlayerView.transform);
+                    
+                    Owner.PlayerModel.RevivalButtonHoldTime += Time.deltaTime;
+                    Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData.PlayerReviveSprite;
+                    GameManager.Instance.UIService.InGameUIViewController.SetGhostReviveFill
+                        (Owner.PlayerModel.RevivalButtonHoldTime / Owner.PlayerModel.PlayerData.RevivalTime);
+
+                    if (!Owner.PlayerModel.RevivalActionTriggered && Owner.PlayerModel.RevivalButtonHoldTime >=
+                        Owner.PlayerModel.PlayerData.RevivalTime)
+                    {
+                        GameManager.Instance.EventService.OnSkeltonRevived.InvokeEvent();
+                        Owner.PlayerModel.RevivalActionTriggered = true;
+                        Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData
+                            .StateDataDict[PlayerState.AliveState].PlayerSprite;
+                    }
                 }
-            }
-            else
-            {
-                Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData.StateDataDict[PlayerState.AliveState].PlayerSprite;
-                Owner.PlayerModel.RevivalButtonHoldTime = 0f;
-                Owner.PlayerModel.RevivalActionTriggered = false;
+                else
+                {
+                    if (vfx != null)
+                    {
+                        vfx.StopVFX(); // Or whatever logic you need
+                    }
+                    Owner.PlayerView.SpriteRenderer.sprite = Owner.PlayerModel.PlayerData
+                        .StateDataDict[PlayerState.AliveState].PlayerSprite;
+                    Owner.PlayerModel.RevivalButtonHoldTime = 0f;
+                    Owner.PlayerModel.RevivalActionTriggered = false;
+                }
             }
         }
 

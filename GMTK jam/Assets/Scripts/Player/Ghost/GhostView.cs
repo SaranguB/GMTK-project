@@ -4,17 +4,20 @@ using Main;
 using Player.States;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using VFX;
 
 namespace Player.Ghost
 {
     public class GhostView : MonoBehaviour
     {
+        [SerializeField] private VFXViewController ghostSmokeVFX;
         private PolygonCollider2D boundaryCollider;
         
         private GhostController ghostController;
         public Rigidbody2D GhostRB;
        
         public PolygonCollider2D BoundaryCollider => boundaryCollider;
+        public VFXViewController GhostSmokeVFX => ghostSmokeVFX;
 
         private void Awake()
         {

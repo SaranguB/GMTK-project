@@ -4,6 +4,7 @@ using Main;
 using Player.Ghost;
 using Player.States;
 using UnityEngine;
+using VFX;
 
 namespace Player
 {
@@ -14,6 +15,8 @@ namespace Player
         [SerializeField] private Transform[] groundCheckPoint;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private BoxCollider2D playerCollider;
+        [SerializeField] private VFXViewController ghostRevivingVFX;
+        
         private PolygonCollider2D boundaryCollider;
         
         private PlayerController playerController;
@@ -22,6 +25,7 @@ namespace Player
         public SpriteRenderer SpriteRenderer => spriteRenderer;
         public Rigidbody2D PlayerRB => playerRB;
         public BoxCollider2D PlayerCollider => playerCollider;
+        public VFXViewController GhostRevivingVFX => ghostRevivingVFX;
 
 
         private void Awake()

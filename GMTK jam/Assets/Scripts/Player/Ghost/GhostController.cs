@@ -1,6 +1,8 @@
 using Main;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
+using VFX;
 
 namespace Player.Ghost
 {
@@ -78,6 +80,7 @@ namespace Player.Ghost
 
         public void SetGhost(PlayerController skeletonPlayer)
         {
+            VFXService.Instance.PlayVFXAtPosition(ghostView.GhostSmokeVFX, ghostView.transform);
             ghostView.gameObject.SetActive(true);
             RestrictGhost(skeletonPlayer);
         }

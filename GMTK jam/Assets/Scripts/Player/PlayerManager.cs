@@ -7,6 +7,8 @@ using Main;
 using Player.Ghost;
 using Player.States;
 using UnityEngine;
+using UnityEngine.VFX;
+using VFX;
 
 namespace Player
 {
@@ -26,6 +28,7 @@ namespace Player
         
         private Dictionary<PlayerState, Queue<PlayerController>> spawnedPlayers = new();
 
+        public Dictionary<PlayerState, Queue<PlayerController>> SpawnedPlayers => spawnedPlayers;
         private void Awake()
         {
             SubscribeToEvents();
@@ -154,7 +157,18 @@ namespace Player
 
         private IEnumerator RemoveGhostInSeconds()
         {
-            yield return new WaitForSeconds(10);
+            float duration = 5f;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float remaining = Mathf.Clamp01(1f - (elapsed / duration));
+
+                GameManager.Instance.UIService.InGameUIViewController.SetGhostReviveFill(remaining);
+                yield return null;
+            }
+            
             OnGhostDestroyed();
         }
 
@@ -165,6 +179,8 @@ namespace Player
             {
                 if (alivePlayer.GhostController != null)
                 {
+                    VFXService.Instance.PlayVFXAtPosition(alivePlayer.GhostController.GhostView.GhostSmokeVFX,
+                        alivePlayer.GhostController.GhostView.transform);
                     alivePlayer.OnGhostDestroyed();
                     playerCamera.Follow = alivePlayer.PlayerView.transform;
                 }
@@ -190,7 +206,7 @@ namespace Player
 
         private IEnumerator RemoveSkeletonInSeconds(PlayerController skeletonPlayer)
         {
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(10);
             if (spawnedPlayers.TryGetValue(PlayerState.SkeletonState, out var skeletonQueue) &&
                 skeletonQueue.Count > 0 &&
                 skeletonQueue.Peek() == skeletonPlayer)

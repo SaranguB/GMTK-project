@@ -1,4 +1,5 @@
 using Events;
+using Player;
 using UI;
 using UnityEngine;
 using Utilities;
@@ -14,6 +15,7 @@ namespace Main
     public class GameManager : GenericMonoSingelton<GameManager>
     {
         [SerializeField] private UIService uiService;
+        [SerializeField] private PlayerManager playerManager;
         
         private EventService eventService;
 
@@ -22,6 +24,8 @@ namespace Main
         private GameStates currentState;
 
         public GameStates CurrentState => currentState;
+        public UIService UIService => uiService;
+        public PlayerManager PlayerManager => playerManager;
 
         protected override void Awake()
         {

@@ -60,7 +60,7 @@ namespace UI.MainMenuUI
         {
             CanvasGroupExtension.Hide(mainMenuCanvas);
             GameManager.Instance.ChangeState(GameStates.Gameplay);
-            
+            CanvasGroupExtension.Show(GameManager.Instance.UIService.InGameUIViewController.IngameUICanvas); 
             UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         }
         
